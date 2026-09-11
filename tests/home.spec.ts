@@ -37,7 +37,7 @@ test('filters', async ({ page }) => {
     }
 });
 
-test.only('Selectcheckbo', async ({ page }) => {
+test('Selectcheckbo', async ({ page }) => {
     await homePageobj.selectchechbox('fashion');
     await homePageobj.selectchechbox('household');
     await expect.soft(homePageobj.maximumnumberofProductShowing).toContainText('Showing 0 results');
