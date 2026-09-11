@@ -1,0 +1,17 @@
+{
+    
+    "searchitems": [
+        {
+            "name": "ADIDAS ORIGINAL",
+            "description": "Description for Item 1"
+        },
+        {
+            "name": "ZARA COAT 3",
+            "description": "Description for Item 2"
+        },
+        {
+            "name": "iphone 13 pro",
+            "description": "Description for Item 3"
+        }
+    ]
+}
