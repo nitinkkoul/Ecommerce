@@ -9,7 +9,7 @@ let homePageobj: homepage;
 
 test.beforeEach(async ({ page }) => {
     const loginPage = new LoginPage(page);
-    await page.goto('');
+    await page.goto(process.env.BASE_URL!);
     await loginPage.login(process.env.LOGIN_USERNAME!, process.env.LOGIN_PASSWORD!)
     homePageobj = new homepage(page);
 
@@ -43,9 +43,4 @@ test('Selectcheckbo', async ({ page }) => {
     await expect.soft(homePageobj.maximumnumberofProductShowing).toContainText('Showing 0 results');
     await homePageobj.selectchechbox('electronics');
     await expect.soft(homePageobj.maximumnumberofProductShowing).toContainText('Showing 3 results');
-
-
 });
-
-
-
