@@ -20,10 +20,10 @@ test.beforeEach(async ({ page }) => {
 
     cartpageobj = new cartpage(page);
     homepageobj = new homepage(page);
+    // await cartpageobj.deleteAllItems();
 });
 
 test('gotocart', async () => {
-    test.setTimeout(60000); // 60 seconds
 
     await homepageobj.addProduct('ZARA COAT 3');
 

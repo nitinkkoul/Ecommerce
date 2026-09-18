@@ -1,85 +1,153 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 import path from 'path';
-import fs from 'fs'
+import fs from 'fs';
 
 export class cartpage {
-    readonly page: Page
+
+    readonly page: Page;
     readonly cartbutton: Locator;
-    readonly cartproductname: Locator
+    readonly cartproductname: Locator;
     readonly placeOrder: Locator;
     readonly selectcountry: Locator;
 
     constructor(page: Page) {
+
         this.page = page;
-        this.cartbutton = this.page.locator("[routerlink='/dashboard/cart']");
-        this.cartproductname = page.locator('.cartSection h3');
-        this.placeOrder = page.getByText('Place Order')
-        this.selectcountry = page.getByPlaceholder('Select Country');
+
+        this.cartbutton =
+            this.page.locator("[routerlink='/dashboard/cart']");
+
+        this.cartproductname =
+            this.page.locator('.cartSection h3');
+
+        this.placeOrder =
+            this.page.getByText('Place Order');
+
+        this.selectcountry =
+            page.getByPlaceholder('Select Country');
     }
+
     async clickoncartbutton() {
+
         await this.cartbutton.click();
-        await this.cartproductname.first().waitFor({ state: 'visible' });
+
+        await this.cartproductname
+            .first()
+            .waitFor({ state: 'visible' });
     }
 
-   async checkout() {
-    await this.page.getByRole('button', { name: 'Checkout' }).click();
-}
+    async checkout() {
 
+        const checkoutButton =
+            this.page.getByRole('button', {
+                name: 'Checkout'
+            });
 
-    
+        await checkoutButton.waitFor({
+            state: 'visible'
+        });
+
+        await checkoutButton.click();
+    }
+
     async placeOrderbutton() {
+
+        await this.placeOrder.waitFor({
+            state: 'visible'
+        });
+
         await this.placeOrder.click();
     }
+
     async entercountry() {
-        await this.selectcountry.waitFor({ state: 'visible' });
+
+        await this.selectcountry.waitFor({
+            state: 'visible'
+        });
+
         await this.selectcountry.pressSequentially('Indi');
-        await this.page.getByText('India', { exact: true }).click();
+
+        const india =
+            this.page.getByText('India', {
+                exact: true
+            });
+
+        await india.waitFor({
+            state: 'visible'
+        });
+
+        await india.click();
     }
- async orderdetailsinCSV() {
 
-    const downloadButton = this.page.getByRole('button', {
-        name: 'Click To Download Order Details in CSV',
-        exact: true
-    });
+    async orderdetailsinCSV() {
 
-    await downloadButton.waitFor({
-        state: 'visible'
-    });
+        const downloadButton =
+            this.page.getByRole('button', {
+                name: 'Click To Download Order Details in CSV',
+                exact: true
+            });
 
-    console.log('Download button visible');
+        await downloadButton.waitFor({
+            state: 'visible'
+        });
 
-    const [download] = await Promise.all([
-        this.page.waitForEvent('download', {
-            timeout: 30000
-        }),
-        downloadButton.click()
-    ]);
+        console.log('Download button visible');
 
-    console.log('Download event fired');
+        const [download] = await Promise.all([
 
-    const originalFileName = download.suggestedFilename();
+            this.page.waitForEvent('download', {
+                timeout: 30000
+            }),
 
-    const downloadDir = path.resolve(
-        process.cwd(),
-        'data',
-        'download'
-    );
+            downloadButton.click()
+        ]);
 
-    fs.mkdirSync(downloadDir, {
-        recursive: true
-    });
+        console.log('Download event fired');
 
-    const outputPath = path.resolve(
-        downloadDir,
-        originalFileName
-    );
+        const originalFileName =
+            download.suggestedFilename();
 
-    await download.saveAs(outputPath);
+        const downloadDir =
+            path.resolve(
+                process.cwd(),
+                'data',
+                'download'
+            );
 
-    console.log('File saved:', outputPath);
+        fs.mkdirSync(downloadDir, {
+            recursive: true
+        });
 
-    return {
-        originalFileName,
-        filePath: outputPath
-    };
-}}
+        const outputPath =
+            path.resolve(
+                downloadDir,
+                originalFileName
+            );
+
+        await download.saveAs(outputPath);
+
+        console.log('File saved:', outputPath);
+
+        return {
+            originalFileName,
+            filePath: outputPath
+        };
+    }
+
+    async deleteAllItems() {
+
+        const deleteButtons =
+            this.page.locator('.fa.fa-trash-o');
+
+        while (await deleteButtons.count() > 0) {
+
+            const initialCount =
+                await deleteButtons.count();
+
+            await deleteButtons.first().click();
+
+            await expect(deleteButtons)
+                .toHaveCount(initialCount - 1);
+        }
+    }
+}
