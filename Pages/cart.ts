@@ -44,9 +44,15 @@ export class cartpage {
 
     console.log('Download button visible');
 
-    console.log(
-        await downloadButton.evaluate(el => el.outerHTML)
-    );
+    const downloads: string[] = [];
+
+    this.page.on('request', request => {
+        console.log('REQUEST:', request.method(), request.url());
+    });
+
+    this.page.on('response', response => {
+        console.log('RESPONSE:', response.status(), response.url());
+    });
 
     await downloadButton.click();
 
