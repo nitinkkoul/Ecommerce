@@ -40,9 +40,15 @@ export class cartpage {
         exact: true
     });
 
-    await downloadButton.waitFor({ state: 'visible' });
+    await downloadButton.waitFor({
+        state: 'visible'
+    });
 
     console.log('Download button visible');
+
+    console.log(
+        await downloadButton.evaluate(el => el.outerHTML)
+    );
 
     const [download] = await Promise.all([
         this.page.waitForEvent('download'),
