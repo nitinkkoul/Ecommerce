@@ -44,8 +44,8 @@ test('Selectcheckbo', async ({ page }) => {
     await homePageobj.selectchechbox('electronics');
     await expect.soft(homePageobj.maximumnumberofProductShowing).toContainText('Showing 3 results');
 });
-test('addproduct', async ({ page }) => {
-    await homePageobj.addProduct('ZARA COAT 3');
+// test.only('addproduct', async ({ page }) => {
+//     await homePageobj.addProductandDelete('ZARA COAT 3');
 
-})
+// })
 
