@@ -19,7 +19,8 @@ export class cartpage {
     }
 
     async checkout() {
-        await this.page.getByRole('button', { name: 'Checkout' }).click();
+        await this.cartbutton.click();
+    await this.cartproductname.first().waitFor({ state: 'visible' });
 
     }
     async placeOrderbutton() {
