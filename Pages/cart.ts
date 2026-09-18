@@ -40,19 +40,37 @@ export class cartpage {
         exact: true
     });
 
-    await downloadButton.waitFor({ state: 'visible' });
+    await downloadButton.waitFor({
+        state: 'visible'
+    });
 
     console.log('Download button visible');
 
-    this.page.on('request', request => {
-        console.log('REQUEST:', request.method(), request.url());
-    });
-
-    this.page.on('response', response => {
-        console.log('RESPONSE:', response.status(), response.url());
-    });
+    const downloadPromise = this.page.waitForEvent('download', {
+        timeout: 10000
+    }).catch(() => null);
 
     await downloadButton.click();
 
     console.log('CLICK COMPLETED');
+
+    const download = await downloadPromise;
+
+    if (!download) {
+        console.log('Download event not fired');
+        return null;
+    }
+
+    const originalFileName = download.suggestedFilename();
+
+    const filePath = `data/download-${Date.now()}.csv`;
+
+    await download.saveAs(filePath);
+
+    console.log('File saved:', filePath);
+
+    return {
+        originalFileName,
+        filePath
+    };
 }}
