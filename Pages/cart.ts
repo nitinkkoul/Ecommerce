@@ -33,7 +33,7 @@ export class cartpage {
         await this.selectcountry.pressSequentially('Indi');
         await this.page.getByText('India', { exact: true }).click();
     }
-  async orderdetailsinCSV() {
+ async orderdetailsinCSV() {
 
     const downloadButton = this.page.getByRole('button', {
         name: 'Click To Download Order Details in CSV',
@@ -44,21 +44,12 @@ export class cartpage {
 
     console.log('Download button visible');
 
-    this.page.on('response', async response => {
+    this.page.on('request', request => {
+        console.log('REQUEST:', request.method(), request.url());
+    });
 
-        if (response.url().includes('get-orders-details')) {
-
-            console.log('STATUS:', response.status());
-
-            console.log(
-                'CONTENT-TYPE:',
-                response.headers()['content-type']
-            );
-
-            const body = await response.text();
-
-            console.log('BODY:', body);
-        }
+    this.page.on('response', response => {
+        console.log('RESPONSE:', response.status(), response.url());
     });
 
     await downloadButton.click();
