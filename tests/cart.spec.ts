@@ -17,7 +17,7 @@ test.beforeEach(async ({ page }) => {
   homepageobj = new homepage(page);
 
 });
-test.only('gotocart', async ({ page }) => {
+test('gotocart', async ({ page }) => {
   await homepageobj.addProduct('ZARA COAT 3');
   await homepageobj.addProduct('ADIDAS ORIGINAL');
   await cartpageobj.clickoncartbutton();
