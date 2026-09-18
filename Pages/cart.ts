@@ -46,10 +46,16 @@ export class cartpage {
         state: 'visible'
     });
 
+    console.log('Download button visible');
+
     const [download] = await Promise.all([
-        this.page.waitForEvent('download'),
+        this.page.waitForEvent('download', {
+            timeout: 30000
+        }),
         downloadButton.click()
     ]);
+
+    console.log('Download event fired');
 
     const originalFileName = download.suggestedFilename();
 
