@@ -34,12 +34,18 @@ export class homepage {
         return await this.searchfilter.fill(entertext);
 
     }
-async selectchechbox(option: string) {
-    await this.page
-        .locator('div')
-        .filter({ has: this.page.getByRole('heading', { name: 'Categories' }) })
-        .getByText(option, { exact: true })
-        .locator('xpath=preceding-sibling::input[@type="checkbox"]')
-        .check();
-}
+    async selectchechbox(option: string) {
+        await this.page
+            .locator('div')
+            .filter({ has: this.page.getByRole('heading', { name: 'Categories' }) })
+            .getByText(option, { exact: true })
+            .locator('xpath=preceding-sibling::input[@type="checkbox"]')
+            .check();
+    }
+
+    async addProduct(productName: string) {
+        await this.page.getByRole('heading', { name: productName }).locator('..')
+            .getByRole('button', { name: 'Add To Cart' })
+            .click();
+    }
 }
