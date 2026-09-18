@@ -46,20 +46,15 @@ export class cartpage {
 
     console.log('Download button visible');
 
-    const downloadPromise = this.page.waitForEvent('download', {
-        timeout: 10000
-    }).catch(() => null);
-
-    await downloadButton.click();
+    const [download] = await Promise.all([
+        this.page.waitForEvent('download', {
+            timeout: 15000
+        }),
+        downloadButton.click()
+    ]);
 
     console.log('CLICK COMPLETED');
-
-    const download = await downloadPromise;
-
-    if (!download) {
-        console.log('Download event not fired');
-        return null;
-    }
+    console.log('Download event fired');
 
     const originalFileName = download.suggestedFilename();
 
@@ -73,4 +68,4 @@ export class cartpage {
         originalFileName,
         filePath
     };
-}}
+}
