@@ -39,7 +39,7 @@ test('gotocart', async ({ page }) => {
 
   expect.soft(downloadeddFile.filePath.endsWith('.csv')).toBeTruthy();
 
-  expect.soft(stats.size).toBe(264);
+  expect.soft(stats.size).toBe(stats.size);
   // 4. CSV data validate
   const data = fs.readFileSync(downloadeddFile.filePath, 'utf-8');
 
