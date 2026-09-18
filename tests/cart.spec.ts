@@ -17,34 +17,38 @@ test.beforeEach(async ({ page }) => {
   homepageobj = new homepage(page);
 
 });
-test('gotocart', async ({ page }) => {
-  await homepageobj.addProduct('ZARA COAT 3');
-  await homepageobj.addProduct('ADIDAS ORIGINAL');
-  await cartpageobj.clickoncartbutton();
-  // await cartpageobj.buybutton();
-  await cartpageobj.checkout();
-  await cartpageobj.entercountry();
-  await cartpageobj.placeOrderbutton();
-  const downloadeddFile = await cartpageobj.orderdetailsinCSV();
+ test('gotocart', async () => {
 
-  const stats = fs.statSync(downloadeddFile.filePath);
+    await homepageobj.addProduct('ZARA COAT 3');
+    await homepageobj.addProduct('ADIDAS ORIGINAL');
 
-  console.log(stats.size);
+    await cartpageobj.clickoncartbutton();
+    await cartpageobj.checkout();
+    await cartpageobj.entercountry();
+    await cartpageobj.placeOrderbutton();
 
-  // 1. Website ka original filename
-  expect.soft(downloadeddFile.originalFileName).toBe('order-invoice_nitinkkoul.csv');
+    const downloadedFile = await cartpageobj.orderdetailsinCSV();
 
-  // 2. Local file exist karti hai
-  expect.soft(fs.existsSync(downloadeddFile.filePath)).toBeTruthy();
+    console.log('File exists:', fs.existsSync(downloadedFile.filePath));
 
-  expect.soft(downloadeddFile.filePath.endsWith('.csv')).toBeTruthy();
+    const stats = fs.statSync(downloadedFile.filePath);
 
-    expect(stats.size).toBeGreaterThan(0);
+    console.log('File size:', stats.size);
+    console.log('File name:', downloadedFile.originalFileName);
 
-  // 4. CSV data validate
-  const data = fs.readFileSync(downloadeddFile.filePath, 'utf-8');
+    expect(downloadedFile.originalFileName)
+        .toBe('order-invoice_nitinkkoul.csv');
 
-  expect.soft(data).toContain('Order');
-  expect.soft(data).toContain('Product');
-  fs.unlinkSync(downloadeddFile.filePath);
-})
+    expect(fs.existsSync(downloadedFile.filePath))
+        .toBeTruthy();
+
+    expect(stats.size)
+        .toBeGreaterThan(0);
+
+    const data = fs.readFileSync(downloadedFile.filePath, 'utf-8');
+
+    expect(data).toContain('Order');
+    expect(data).toContain('Product');
+
+    fs.unlinkSync(downloadedFile.filePath);
+});

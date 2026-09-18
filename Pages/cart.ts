@@ -35,23 +35,32 @@ export class cartpage {
     }
     async orderdetailsinCSV() {
 
-        const [downloadPromise] = await Promise.all([
-            this.page.waitForEvent('download'),
-            this.page.getByRole('button', {
-                name: 'Click To Download Order Details in CSV',
-                exact: true
-            }).click()
-        ]);
-        const originalFileName = downloadPromise.suggestedFilename();
-        const filePath = `data/download-${Date.now()}.csv`;
-        await downloadPromise.saveAs(filePath);
+    const downloadButton = this.page.getByRole('button', {
+        name: 'Click To Download Order Details in CSV',
+        exact: true
+    });
 
+    await downloadButton.waitFor({ state: 'visible' });
 
-        return {
-            originalFileName,
-            filePath
-        };
+    console.log('Download button visible');
 
-    }
-}
+    const [download] = await Promise.all([
+        this.page.waitForEvent('download'),
+        downloadButton.click()
+    ]);
 
+    console.log('Download started');
+
+    const originalFileName = download.suggestedFilename();
+
+    const filePath = `data/download-${Date.now()}.csv`;
+
+    await download.saveAs(filePath);
+
+    console.log('File saved:', filePath);
+
+    return {
+        originalFileName,
+        filePath
+    };
+}}
