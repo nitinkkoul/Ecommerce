@@ -44,21 +44,25 @@ export class cartpage {
 
     console.log('Download button visible');
 
-    const downloads: string[] = [];
+    this.page.on('response', async response => {
 
-    this.page.on('request', request => {
-        console.log('REQUEST:', request.method(), request.url());
-    });
+        if (response.url().includes('get-orders-details')) {
 
-    this.page.on('response', response => {
-        console.log('RESPONSE:', response.status(), response.url());
+            console.log('ORDER API:', response.status());
+
+            console.log(
+                'CONTENT-TYPE:',
+                response.headers()['content-type']
+            );
+
+            console.log(
+                'CONTENT-DISPOSITION:',
+                response.headers()['content-disposition']
+            );
+        }
     });
 
     await downloadButton.click();
 
     console.log('CLICK COMPLETED');
-
-    await this.page.waitForTimeout(3000);
-
-    console.log('AFTER CLICK');
 }}
