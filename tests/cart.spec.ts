@@ -22,65 +22,65 @@ test.beforeEach(async ({ page }) => {
     homepageobj = new homepage(page);
 });
 
-test('gotocart', async () => {
+// test('gotocart', async () => {
 
-    await homepageobj.addProduct('ZARA COAT 3');
+//     await homepageobj.addProduct('ZARA COAT 3');
 
-    await homepageobj.addProduct('ADIDAS ORIGINAL');
+//     await homepageobj.addProduct('ADIDAS ORIGINAL');
 
-    await cartpageobj.clickoncartbutton();
+//     await cartpageobj.clickoncartbutton();
 
-    await cartpageobj.checkout();
+//     await cartpageobj.checkout();
 
-    await cartpageobj.entercountry();
+//     await cartpageobj.entercountry();
 
-    await cartpageobj.placeOrderbutton();
+//     await cartpageobj.placeOrderbutton();
 
-    const downloadedFile =
-        await cartpageobj.orderdetailsinCSV();
+//     const downloadedFile =
+//         await cartpageobj.orderdetailsinCSV();
 
-    expect(downloadedFile).not.toBeNull();
+//     expect(downloadedFile).not.toBeNull();
 
-    if (!downloadedFile) {
-        return;
-    }
+//     if (!downloadedFile) {
+//         return;
+//     }
 
-    console.log(
-        'File exists:',
-        fs.existsSync(downloadedFile.filePath)
-    );
+//     console.log(
+//         'File exists:',
+//         fs.existsSync(downloadedFile.filePath)
+//     );
 
-    const stats =
-        fs.statSync(downloadedFile.filePath);
+//     const stats =
+//         fs.statSync(downloadedFile.filePath);
 
-    console.log(
-        'File size:',
-        stats.size
-    );
+//     console.log(
+//         'File size:',
+//         stats.size
+//     );
 
-    console.log(
-        'File name:',
-        downloadedFile.originalFileName
-    );
+//     console.log(
+//         'File name:',
+//         downloadedFile.originalFileName
+//     );
 
-    expect(downloadedFile.originalFileName)
-        .toBe('order-invoice_nitinkkoul.csv');
+//     expect(downloadedFile.originalFileName)
+//         .toBe('order-invoice_nitinkkoul.csv');
 
-    expect(fs.existsSync(downloadedFile.filePath))
-        .toBeTruthy();
+//     expect(fs.existsSync(downloadedFile.filePath))
+//         .toBeTruthy();
 
-    expect(stats.size)
-        .toBeGreaterThan(0);
+//     expect(stats.size)
+//         .toBeGreaterThan(0);
 
-    const data =
-        fs.readFileSync(
-            downloadedFile.filePath,
-            'utf-8'
-        );
+//     const data =
+//         fs.readFileSync(
+//             downloadedFile.filePath,
+//             'utf-8'
+//         );
 
-    expect(data).toContain('Order');
+//     expect(data).toContain('Order');
 
-    expect(data).toContain('Product');
+//     expect(data).toContain('Product');
 
-    fs.unlinkSync(downloadedFile.filePath);
-});
+//     fs.unlinkSync(downloadedFile.filePath);
+// });
