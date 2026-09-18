@@ -1,4 +1,6 @@
 import { Page, Locator } from '@playwright/test';
+import path from 'path';
+import fs from 'fs'
 
 export class cartpage {
     readonly page: Page
@@ -44,28 +46,34 @@ export class cartpage {
         state: 'visible'
     });
 
-    console.log('Download button visible');
-
     const [download] = await Promise.all([
-        this.page.waitForEvent('download', {
-            timeout: 15000
-        }),
+        this.page.waitForEvent('download'),
         downloadButton.click()
     ]);
 
-    console.log('CLICK COMPLETED');
-    console.log('Download event fired');
-
     const originalFileName = download.suggestedFilename();
 
-    const filePath = `data/download-${Date.now()}.csv`;
+    const downloadDir = path.resolve(
+        process.cwd(),
+        'data',
+        'download'
+    );
 
-    await download.saveAs(filePath);
+    fs.mkdirSync(downloadDir, {
+        recursive: true
+    });
 
-    console.log('File saved:', filePath);
+    const outputPath = path.resolve(
+        downloadDir,
+        originalFileName
+    );
+
+    await download.saveAs(outputPath);
+
+    console.log('File saved:', outputPath);
 
     return {
         originalFileName,
-        filePath
+        filePath: outputPath
     };
 }}
