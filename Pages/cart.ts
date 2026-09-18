@@ -16,17 +16,20 @@ export class cartpage {
     }
     async clickoncartbutton() {
         await this.cartbutton.click();
+        await this.cartproductname.first().waitFor({ state: 'visible' });
     }
 
-    async checkout() {
-        await this.cartbutton.click();
-    await this.cartproductname.first().waitFor({ state: 'visible' });
+   async checkout() {
+    await this.page.getByRole('button', { name: 'Checkout' }).click();
+}
 
-    }
+
+    
     async placeOrderbutton() {
         await this.placeOrder.click();
     }
     async entercountry() {
+        await this.selectcountry.waitFor({ state: 'visible' });
         await this.selectcountry.pressSequentially('Indi');
         await this.page.getByText('India', { exact: true }).click();
     }
@@ -42,7 +45,7 @@ export class cartpage {
         const originalFileName = downloadPromise.suggestedFilename();
         const filePath = `data/download-${Date.now()}.csv`;
         await downloadPromise.saveAs(filePath);
-        
+
 
         return {
             originalFileName,
