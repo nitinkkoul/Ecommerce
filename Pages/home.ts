@@ -44,8 +44,21 @@ export class homepage {
     }
 
     async addProduct(productName: string) {
-        await this.page.getByRole('heading', { name: productName }).locator('..')
-            .getByRole('button', { name: 'Add To Cart' })
-            .click();
-    }
+
+    const product = this.page.getByRole('heading', {
+        name: productName,
+        exact: true
+    });
+
+    await product.waitFor({
+        state: 'visible'
+    });
+
+    await product
+        .locator('..')
+        .getByRole('button', {
+            name: /Add To Cart/
+        })
+        .click();
+}
 }
