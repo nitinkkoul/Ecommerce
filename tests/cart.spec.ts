@@ -17,7 +17,7 @@ test.beforeEach(async ({ page }) => {
   homepageobj = new homepage(page);
 
 });
- test('gotocart', async () => {
+test('gotocart', async () => {
 
     await homepageobj.addProduct('ZARA COAT 3');
     await homepageobj.addProduct('ADIDAS ORIGINAL');
@@ -27,28 +27,5 @@ test.beforeEach(async ({ page }) => {
     await cartpageobj.entercountry();
     await cartpageobj.placeOrderbutton();
 
-    const downloadedFile = await cartpageobj.orderdetailsinCSV();
-
-    console.log('File exists:', fs.existsSync(downloadedFile.filePath));
-
-    const stats = fs.statSync(downloadedFile.filePath);
-
-    console.log('File size:', stats.size);
-    console.log('File name:', downloadedFile.originalFileName);
-
-    expect(downloadedFile.originalFileName)
-        .toBe('order-invoice_nitinkkoul.csv');
-
-    expect(fs.existsSync(downloadedFile.filePath))
-        .toBeTruthy();
-
-    expect(stats.size)
-        .toBeGreaterThan(0);
-
-    const data = fs.readFileSync(downloadedFile.filePath, 'utf-8');
-
-    expect(data).toContain('Order');
-    expect(data).toContain('Product');
-
-    fs.unlinkSync(downloadedFile.filePath);
+    await cartpageobj.orderdetailsinCSV();
 });

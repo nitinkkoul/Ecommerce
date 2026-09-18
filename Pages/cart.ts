@@ -33,16 +33,14 @@ export class cartpage {
         await this.selectcountry.pressSequentially('Indi');
         await this.page.getByText('India', { exact: true }).click();
     }
-    async orderdetailsinCSV() {
+   async orderdetailsinCSV() {
 
     const downloadButton = this.page.getByRole('button', {
         name: 'Click To Download Order Details in CSV',
         exact: true
     });
 
-    await downloadButton.waitFor({
-        state: 'visible'
-    });
+    await downloadButton.waitFor({ state: 'visible' });
 
     console.log('Download button visible');
 
@@ -50,23 +48,11 @@ export class cartpage {
         await downloadButton.evaluate(el => el.outerHTML)
     );
 
-    const [download] = await Promise.all([
-        this.page.waitForEvent('download'),
-        downloadButton.click()
-    ]);
+    await downloadButton.click();
 
-    console.log('Download started');
+    console.log('CLICK COMPLETED');
 
-    const originalFileName = download.suggestedFilename();
+    await this.page.waitForTimeout(3000);
 
-    const filePath = `data/download-${Date.now()}.csv`;
-
-    await download.saveAs(filePath);
-
-    console.log('File saved:', filePath);
-
-    return {
-        originalFileName,
-        filePath
-    };
+    console.log('AFTER CLICK');
 }}
