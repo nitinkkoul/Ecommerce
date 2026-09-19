@@ -81,4 +81,11 @@ export class homepage {
         this.page.getByRole('button', { name: /Cart \d+/ })
     ).toBeVisible();
 }
+async cartsize() {
+    return this.page
+        .getByRole('button', { name: /Cart/ })
+        .locator('label');
+}
+
+
 }
